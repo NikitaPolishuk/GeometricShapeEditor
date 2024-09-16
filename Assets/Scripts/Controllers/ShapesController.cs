@@ -22,20 +22,25 @@ namespace Asset.Scripts.Controller
 
         private IShapeFactory _prismFactory;
         private IShapeFactory _parallelepipedFactory;
-        private Dictionary<ShapeType, IShape> _shapes = new Dictionary<ShapeType, IShape>();
+        private IShapeFactory _sphereFactory;
+        private IShapeFactory _capsuleFactory;
+        public Dictionary<ShapeType, IShape> Shapes { get; private set; }
 
         public Action<Dictionary<ShapeType, IShape>> ChangeShapes—ount;
 
 
-        public void Init(IShapeFactory prismFactory, IShapeFactory parallelepipedFactory)
+        public void Init(IShapeFactory prismFactory, IShapeFactory parallelepipedFactory, IShapeFactory sphereFactory, IShapeFactory capsuleFactory)
         {
             _prismFactory = prismFactory;
             _parallelepipedFactory = parallelepipedFactory;
-        }
+            _sphereFactory = sphereFactory;
+            _capsuleFactory = capsuleFactory;
+           Shapes = new Dictionary<ShapeType, IShape>();
+    }
 
         public void GenerateShape(ShapeType shapeType, params object[] meshParameters)
         {
-            if (_shapes.TryGetValue(shapeType, out var shape))
+            if (Shapes.TryGetValue(shapeType, out var shape))
             {
                 shape.UpdateMesh(meshParameters);
                 return;
@@ -50,19 +55,21 @@ namespace Asset.Scripts.Controller
                     shape = _prismFactory.CreateShape(_prismPivot);
                     break;
                 case ShapeType.sphere:
+                    shape = _sphereFactory.CreateShape(_spherePivot);
                     break;
                 case ShapeType.capsule:
+                    shape = _capsuleFactory.CreateShape(_capsulePivot);
                     break;
             }
 
             shape.UpdateMesh(meshParameters);
-            _shapes.Add(shapeType, shape);
-            ChangeShapes—ount?.Invoke(_shapes);
+            Shapes.Add(shapeType, shape);
+            ChangeShapes—ount?.Invoke(Shapes);
         }
 
         public void PaintShape(ShapeType shapeType, Color color)
         {
-            if (_shapes.TryGetValue(shapeType, out var shape))
+            if (Shapes.TryGetValue(shapeType, out var shape))
             {
                 shape.Paint(color);
             }
@@ -70,13 +77,13 @@ namespace Asset.Scripts.Controller
 
         public void DestroyShape(ShapeType shapeType)
         {
-            if (_shapes.TryGetValue(shapeType, out var shape))
+            if (Shapes.TryGetValue(shapeType, out var shape))
             {
                 shape.Destroy();
-                _shapes.Remove(shapeType);
+                Shapes.Remove(shapeType);
             }
 
-            ChangeShapes—ount?.Invoke(_shapes);
+            ChangeShapes—ount?.Invoke(Shapes);
         }
     }
 }

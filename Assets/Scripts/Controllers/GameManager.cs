@@ -6,7 +6,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     public ShapesController ShapesController;
-    public CameraController _cameraController;
 
     private void Awake()
     {
@@ -24,6 +23,6 @@ public class GameManager : MonoBehaviour
 
     private void Init()
     {
-        ShapesController.Init(new PrismFactory(), new ParallelepipedFactory());
+        ShapesController.Init(new PrismFactory(), new ParallelepipedFactory(), new SphereFactory(), new CapsuleFactory());
     }
 }

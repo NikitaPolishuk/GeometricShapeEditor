@@ -7,12 +7,6 @@ namespace Assets.Scripts.Model
     {
         private SphereMeshGenerator _prismMeshGenerator;
 
-        private void Start()
-        {
-            Init();
-            UpdateMesh(5f, 30);
-        }
-
         public void Init()
         {
             _prismMeshGenerator = new SphereMeshGenerator();

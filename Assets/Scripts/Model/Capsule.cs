@@ -6,12 +6,6 @@ namespace Assets.Scripts.Model
     {
         private CapsuleMeshGenerator _capsuleMeshGenerator;
 
-        private void Start()
-        {
-            Init();
-            UpdateMesh(2f, 30, 30f);
-        }
-
         public void Init()
         {
             _capsuleMeshGenerator = new CapsuleMeshGenerator();

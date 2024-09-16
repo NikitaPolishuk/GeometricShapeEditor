@@ -11,6 +11,7 @@ public class ShapesCreateView : BaseView
     [SerializeField] Button _deleteButton;
     private ShapeType _type;
 
+    private const string CREATE_ERROR_TEXT = "Not all figure parameters are filled in";
 
     enum ParameterType
     {
@@ -39,23 +40,45 @@ public class ShapesCreateView : BaseView
     {
         var shapesController = GameManager.Instance.ShapesController;
 
+        var lenght = float.TryParse(GetInputField(ParameterType.Length).text, out var lenghtParse);
+        var width = float.TryParse(GetInputField(ParameterType.Width).text, out var widthParse);
+        var height = float.TryParse(GetInputField(ParameterType.Height).text, out var heightParse);
+        var edges = int.TryParse(GetInputField(ParameterType.Edges).text, out var edgesParse);
+        var radius = float.TryParse(GetInputField(ParameterType.Radius).text, out var radiusParse);
+
         switch (_type)
         {
             case ShapeType.parallelepiped:
-                var lenght = float.Parse(GetInputField(ParameterType.Length).text);
-                var width = float.Parse(GetInputField(ParameterType.Width).text);
-                var height = float.Parse(GetInputField(ParameterType.Height).text);
-                shapesController.GenerateShape(_type, lenght, width, height);
+                if (!lenght || !width || !height)
+                {
+                    Debug.LogError(CREATE_ERROR_TEXT);
+                    return;
+                }
+                shapesController.GenerateShape(_type, lenghtParse, widthParse, heightParse);
                 break;
             case ShapeType.prism:
-                var heightPrism = float.Parse(GetInputField(ParameterType.Height).text);
-                var edges = int.Parse(GetInputField(ParameterType.Edges).text);
-                var radius = float.Parse(GetInputField(ParameterType.Radius).text);
-                shapesController.GenerateShape(_type, edges, radius, heightPrism);
+                if (!edges || !radius || !height)
+                {
+                    Debug.LogError(CREATE_ERROR_TEXT);
+                    return;
+                }
+                shapesController.GenerateShape(_type, edgesParse, radiusParse, heightParse);
                 break;
             case ShapeType.sphere:
+                if (!edges || !radius)
+                {
+                    Debug.LogError(CREATE_ERROR_TEXT);
+                    return;
+                }
+                shapesController.GenerateShape(_type, radiusParse, edgesParse);
                 break;
             case ShapeType.capsule:
+                if (!edges || !radius || !height)
+                {
+                    Debug.LogError(CREATE_ERROR_TEXT);
+                    return;
+                }
+                shapesController.GenerateShape(_type, radiusParse, edgesParse, heightParse);
                 break;
         }
     }
@@ -82,8 +105,13 @@ public class ShapesCreateView : BaseView
                 SetActiveParameter(ParameterType.Height, true);
                 break;
             case ShapeType.sphere:
+                SetActiveParameter(ParameterType.Radius, true);
+                SetActiveParameter(ParameterType.Edges, true);
                 break;
             case ShapeType.capsule:
+                SetActiveParameter(ParameterType.Radius, true);
+                SetActiveParameter(ParameterType.Edges, true);
+                SetActiveParameter(ParameterType.Height, true);
                 break;
         }
 

@@ -16,6 +16,7 @@ public class ShapePaintView : BaseView
         _blueSlider.onValueChanged.AddListener(value => ChangeColorButton());
 
         _paintButton.onClick.AddListener(() => GameManager.Instance.ShapesController.PaintShape(_paintShapeType, GetPaintColor()));
+        ChangeColorButton();
     }
 
     public void ChangePaintShape(ShapeType type)

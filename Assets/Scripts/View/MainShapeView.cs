@@ -19,15 +19,24 @@ public class MainShapeView : BaseView
         _capsuleButton.onClick.AddListener(() => ChangeShapeView(ShapeType.capsule));
         _prismaButton.onClick.AddListener(() => ChangeShapeView(ShapeType.prism));
         _parallelepipedButton.onClick.AddListener(() => ChangeShapeView(ShapeType.parallelepiped));
-        GameManager.Instance.ShapesController.ChangeShapes—ount += ChangeShapes—ount;
+        GameManager.Instance.ShapesController.ChangeShapes—ount += CheckNeedEnablePaintView;
     }
 
-    private void ChangeShapes—ount(Dictionary<ShapeType, IShape> shapes)
+    private void OnDestroy()
+    {
+        GameManager.Instance.ShapesController.ChangeShapes—ount -= CheckNeedEnablePaintView;
+    }
+
+    private void CheckNeedEnablePaintView(Dictionary<ShapeType, IShape> shapes)
     {
         if (shapes.ContainsKey(_shapeType))
         {
             _shapePaintView.ShowView();
             _shapePaintView.ChangePaintShape(_shapeType);
+        }
+        else
+        {
+            _shapePaintView.HideView();
         }
     }
 
@@ -49,13 +58,12 @@ public class MainShapeView : BaseView
             case ShapeType.capsule:
                 _capsuleButton.image.color = Color.green;
                 break;
-            default:
-                break;
         }
 
         _shapesParametersView.ShowView();
         _shapesParametersView.ChangeType(shapeType);
         _shapeType = shapeType;
+        CheckNeedEnablePaintView(GameManager.Instance.ShapesController.Shapes);
     }
 
     private void SetCollorAllButtons(Color color)

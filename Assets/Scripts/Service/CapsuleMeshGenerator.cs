@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Assets.Scripts.Contollers
@@ -99,7 +98,7 @@ namespace Assets.Scripts.Contollers
                 }
             }
 
-            int sphereOffset = 2 * (sectors + 1) * (sectors + 1);
+            int sphereOffset = 2 * offset;
             for (int i = 0; i < sectors; i++)
             {
                 for (int j = 0; j < sectors; j++)
