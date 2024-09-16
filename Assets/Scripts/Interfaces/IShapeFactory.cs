@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 namespace Assets.Scripts.Interfaces
 {
     public interface IShapeFactory
     {
-        IShape CreateShape();
+        IShape CreateShape(Transform parent);
     }
 }
